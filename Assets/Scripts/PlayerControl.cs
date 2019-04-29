@@ -5,10 +5,21 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     Rigidbody2D rb;
+
+    Animator anim;
+
+    public float fallLimit = 2f;
     
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+    }
+
+    void Update() {
+        if(rb.velocity.y < fallLimit){
+            anim.SetInteger("State", 0);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other){
@@ -52,6 +63,7 @@ public class PlayerControl : MonoBehaviour
     void Impulse(float force) {
         rb.velocity = Vector3.zero;
         rb.AddForce(Vector3.up * force, ForceMode2D.Impulse);
+        anim.SetInteger("State", 1);
     }
 
     void DestroyPlayer(){
